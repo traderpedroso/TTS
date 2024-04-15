@@ -141,6 +141,7 @@ _abbreviations = {
             ("co", "companhia"),
             ("jr", "júnior"),
             ("ltd", "limitada"),
+            ("ltda", "limitada"),
         ]
     ],
     "it": [
