@@ -16,7 +16,7 @@ from spacy.lang.zh import Chinese
 from tokenizers import Tokenizer
 
 from TTS.tts.layers.xtts.zh_num2words import TextNorm as zh_num2words
-from portuguese import normalizer, split_sentence as split
+from .portuguese import normalizer, split_sentence as split
 
 
 def get_spacy_lang(lang):
