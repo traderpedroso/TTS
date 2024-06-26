@@ -116,6 +116,9 @@ def normalizer(text):
     text = collapse_whitespace(text)
     text = re.sub(r"([^\.,!\?\-…])$", r"\1.", text)
     text = re.sub(r"(?<!\.)\.(?!\.)", ";\n", text)
+    text = re.sub(r"\s+", " ", text)
+    # Remove espaços em branco no início e no final da string
+    text = text.strip()
     return text
 
 
