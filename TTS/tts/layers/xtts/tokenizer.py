@@ -13,6 +13,7 @@ from spacy.lang.en import English
 from spacy.lang.es import Spanish
 from spacy.lang.ja import Japanese
 from spacy.lang.zh import Chinese
+from spacy.lang.pt import Portuguese
 from tokenizers import Tokenizer
 
 from TTS.tts.layers.xtts.zh_num2words import TextNorm as zh_num2words
@@ -28,6 +29,8 @@ def get_spacy_lang(lang):
         return Arabic()
     elif lang == "es":
         return Spanish()
+    elif lang == "pt":
+        return Portuguese()
     else:
         # For most languages, Enlish does the job
         return English()
@@ -636,7 +639,7 @@ class VoiceBpeTokenizer:
     def preprocess_text(self, txt, lang):
         if lang in {"ar", "cs", "de", "en", "es", "fr", "hu", "it", "nl", "pl", "pt", "ru", "tr", "zh", "ko"}:
             if lang == "pt":
-                text = normalizer(text)
+                txt = normalizer(txt)
             txt = multilingual_cleaners(txt, lang)
             if lang == "zh":
                 txt = chinese_transliterate(txt)
