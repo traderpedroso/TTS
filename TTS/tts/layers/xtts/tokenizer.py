@@ -34,6 +34,9 @@ def get_spacy_lang(lang):
 
 def split_sentence(text, lang, text_split_length=200):
     """Preprocess the input text"""
+    if lang == "pt":
+        text_split_length = 100
+
     text_splits = []
     if text_split_length is not None and len(text) >= text_split_length:
         text_splits.append("")
