@@ -16,6 +16,7 @@ from spacy.lang.zh import Chinese
 from tokenizers import Tokenizer
 
 from TTS.tts.layers.xtts.zh_num2words import TextNorm as zh_num2words
+from portuguese import normalizer, split_sentence as split
 
 
 def get_spacy_lang(lang):
@@ -33,6 +34,8 @@ def get_spacy_lang(lang):
 
 
 def split_sentence(text, lang, text_split_length=250):
+    if lang == "pt":
+        text_split_length = 200
     """Preprocess the input text"""
     text_splits = []
     if text_split_length is not None and len(text) >= text_split_length:
@@ -555,6 +558,8 @@ def multilingual_cleaners(text, lang):
         text = text.replace("İ", "i")
         text = text.replace("Ö", "ö")
         text = text.replace("Ü", "ü")
+    if lang == "pt":
+        text = normalizer(text)
     text = lowercase(text)
     text = expand_numbers_multilingual(text, lang)
     text = expand_abbreviations_multilingual(text, lang)
@@ -630,6 +635,8 @@ class VoiceBpeTokenizer:
 
     def preprocess_text(self, txt, lang):
         if lang in {"ar", "cs", "de", "en", "es", "fr", "hu", "it", "nl", "pl", "pt", "ru", "tr", "zh", "ko"}:
+            if lang == "pt":
+                text = normalizer(text)
             txt = multilingual_cleaners(txt, lang)
             if lang == "zh":
                 txt = chinese_transliterate(txt)
