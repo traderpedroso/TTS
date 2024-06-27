@@ -15,7 +15,7 @@ from spacy.lang.ja import Japanese
 from spacy.lang.zh import Chinese
 from spacy.lang.pt import Portuguese
 from tokenizers import Tokenizer
-from portuguese import normalizer
+from .portuguese import normalizer
 from TTS.tts.layers.xtts.zh_num2words import TextNorm as zh_num2words
 
 
