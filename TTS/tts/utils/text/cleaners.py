@@ -148,8 +148,6 @@ def portuguese_cleaners(text):
 
     text = normalizer(text)
     text = lowercase(text)
-    text = replace_symbols(text, lang="pt")
-    text = remove_aux_symbols(text)
     text = collapse_whitespace(text)
     return text
 
