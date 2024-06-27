@@ -13,10 +13,11 @@ from spacy.lang.en import English
 from spacy.lang.es import Spanish
 from spacy.lang.ja import Japanese
 from spacy.lang.zh import Chinese
+from spacy.lang.pt import Portuguese
+from spacy.lan
 from tokenizers import Tokenizer
 
 from TTS.tts.layers.xtts.zh_num2words import TextNorm as zh_num2words
-from .portuguese import split_sentence as pt_sentence
 
 
 def get_spacy_lang(lang):
@@ -28,47 +29,47 @@ def get_spacy_lang(lang):
         return Arabic()
     elif lang == "es":
         return Spanish()
+    elif lang == "pt":
+        return Portuguese()
     else:
         # For most languages, Enlish does the job
         return English()
 
 
-def split_sentence(text, lang, text_split_length=250):
-
+def split_sentence(text, lang, text_split_length=200):
     if lang == "pt":
-        text_splits = pt_sentence(text)
-    else:
-        """Preprocess the input text"""
-        text_splits = []
-        if text_split_length is not None and len(text) >= text_split_length:
-            text_splits.append("")
-            nlp = get_spacy_lang(lang)
-            nlp.add_pipe("sentencizer")
-            doc = nlp(text)
-            for sentence in doc.sents:
-                if len(text_splits[-1]) + len(str(sentence)) <= text_split_length:
-                    # if the last sentence + the current sentence is less than the text_split_length
-                    # then add the current sentence to the last sentence
-                    text_splits[-1] += " " + str(sentence)
-                    text_splits[-1] = text_splits[-1].lstrip()
-                elif len(str(sentence)) > text_split_length:
-                    # if the current sentence is greater than the text_split_length
-                    for line in textwrap.wrap(
-                        str(sentence),
-                        width=text_split_length,
-                        drop_whitespace=True,
-                        break_on_hyphens=False,
-                        tabsize=1,
-                    ):
-                        text_splits.append(str(line))
-                else:
-                    text_splits.append(str(sentence))
+        text_split_length = 190
+    """Preprocess the input text"""
+    text_splits = []
+    if text_split_length is not None and len(text) >= text_split_length:
+        text_splits.append("")
+        nlp = get_spacy_lang(lang)
+        nlp.add_pipe("sentencizer")
+        doc = nlp(text)
+        for sentence in doc.sents:
+            if len(text_splits[-1]) + len(str(sentence)) <= text_split_length:
+                # if the last sentence + the current sentence is less than the text_split_length
+                # then add the current sentence to the last sentence
+                text_splits[-1] += " " + str(sentence)
+                text_splits[-1] = text_splits[-1].lstrip()
+            elif len(str(sentence)) > text_split_length:
+                # if the current sentence is greater than the text_split_length
+                for line in textwrap.wrap(
+                    str(sentence),
+                    width=text_split_length,
+                    drop_whitespace=True,
+                    break_on_hyphens=False,
+                    tabsize=1,
+                ):
+                    text_splits.append(str(line))
+            else:
+                text_splits.append(str(sentence))
 
-            if len(text_splits) > 1:
-                if text_splits[0] == "":
-                    del text_splits[0]
-        else:
-            text_splits = [text.lstrip()]
+        if len(text_splits) > 1:
+            if text_splits[0] == "":
+                del text_splits[0]
+    else:
+        text_splits = [text.lstrip()]
 
     return text_splits
 
