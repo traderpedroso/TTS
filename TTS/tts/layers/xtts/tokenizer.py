@@ -297,6 +297,11 @@ _symbols_multilingual = {
     "pt": [
         (re.compile(r"%s" % re.escape(x[0]), re.IGNORECASE), x[1])
         for x in [
+            ("&", " e "),
+            ("@", " arroba "),
+            ("%", " por cento "),
+            ("#", " cardinal "),
+            ("$", " dólar "),
             ("£", " libra "),
             ("°", " graus "),
         ]
@@ -442,6 +447,7 @@ _ordinal_re = {
     "es": re.compile(r"([0-9]+)(º|ª|er|o|a|os|as)"),
     "fr": re.compile(r"([0-9]+)(º|ª|er|re|e|ème)"),
     "de": re.compile(r"([0-9]+)(st|nd|rd|th|º|ª|\.(?=\s|$))"),
+    "pt": re.compile(r"([0-9]+)(º|ª|o|a|os|as)"),
     "it": re.compile(r"([0-9]+)(º|°|ª|o|a|i|e)"),
     "pl": re.compile(r"([0-9]+)(º|ª|st|nd|rd|th)"),
     "ar": re.compile(r"([0-9]+)(ون|ين|ث|ر|ى)"),
@@ -492,6 +498,7 @@ def _expand_currency(m, lang="en", currency="USD"):
         "es": " con ",
         "fr": " et ",
         "de": " und ",
+        "pt": " e ",
         "it": " e ",
         "pl": ", ",
         "cs": ", ",
@@ -512,11 +519,11 @@ def _expand_currency(m, lang="en", currency="USD"):
 
 
 def _expand_ordinal(m, lang="en"):
-    return num2words(int(m.group(1)), ordinal=True, lang=lang if lang != "pt" else "cz")
+    return num2words(int(m.group(1)), ordinal=True, lang=lang if lang != "cs" else "cz")
 
 
 def _expand_number(m, lang="en"):
-    return num2words(int(m.group(0)), lang=lang if lang != "pt" else "cz")
+    return num2words(int(m.group(0)), lang=lang if lang != "cs" else "cz")
 
 
 def expand_numbers_multilingual(text, lang="en"):
@@ -555,9 +562,10 @@ def multilingual_cleaners(text, lang):
         text = text.replace("Ö", "ö")
         text = text.replace("Ü", "ü")
     text = lowercase(text)
-    text = expand_numbers_multilingual(text, lang)
-    text = expand_abbreviations_multilingual(text, lang)
-    text = expand_symbols_multilingual(text, lang=lang)
+    if lang != "pt":
+        text = expand_numbers_multilingual(text, lang)
+        text = expand_abbreviations_multilingual(text, lang)
+        text = expand_symbols_multilingual(text, lang=lang)
     text = collapse_whitespace(text)
     return text
 
