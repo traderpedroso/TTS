@@ -13,8 +13,9 @@ from spacy.lang.en import English
 from spacy.lang.es import Spanish
 from spacy.lang.ja import Japanese
 from spacy.lang.zh import Chinese
+from spacy.lang.pt import Portuguese
 from tokenizers import Tokenizer
-
+from portuguese import normalizer
 from TTS.tts.layers.xtts.zh_num2words import TextNorm as zh_num2words
 
 
@@ -27,6 +28,8 @@ def get_spacy_lang(lang):
         return Arabic()
     elif lang == "es":
         return Spanish()
+    elif lang == "pt":
+        return Portuguese()
     else:
         # For most languages, Enlish does the job
         return English()
@@ -35,7 +38,7 @@ def get_spacy_lang(lang):
 def split_sentence(text, lang, text_split_length=200):
     """Preprocess the input text"""
     if lang == "pt":
-        text_split_length = 100
+        text_split_length = 190
 
     text_splits = []
     if text_split_length is not None and len(text) >= text_split_length:
@@ -553,6 +556,9 @@ def collapse_whitespace(text):
 
 
 def multilingual_cleaners(text, lang):
+    if lang == "pt":
+        text = normalizer(text)
+
     text = text.replace('"', "")
     if lang == "tr":
         text = text.replace("İ", "i")
@@ -632,6 +638,8 @@ class VoiceBpeTokenizer:
             )
 
     def preprocess_text(self, txt, lang):
+        if lang == "pt":
+            txt = normalizer(txt)
         if lang in {"ar", "cs", "de", "en", "es", "fr", "hu", "it", "nl", "pl", "pt", "ru", "tr", "zh", "ko"}:
             txt = multilingual_cleaners(txt, lang)
             if lang == "zh":
