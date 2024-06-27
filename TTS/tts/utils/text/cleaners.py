@@ -158,6 +158,7 @@ def chinese_mandarin_cleaners(text: str) -> str:
 
 def multilingual_cleaners(text):
     """Pipeline for multilingual text"""
+    text = normalizer(text)
     text = lowercase(text)
     text = replace_symbols(text, lang=None)
     text = remove_aux_symbols(text)
