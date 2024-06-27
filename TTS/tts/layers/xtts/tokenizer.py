@@ -556,6 +556,8 @@ def collapse_whitespace(text):
 
 
 def multilingual_cleaners(text, lang):
+    if lang == "pt":
+        text = normalizer(text)
     text = text.replace('"', "")
     if lang == "tr":
         text = text.replace("İ", "i")
@@ -636,9 +638,6 @@ class VoiceBpeTokenizer:
             )
 
     def preprocess_text(self, txt, lang):
-        if lang == "pt":
-            txt = normalizer(txt)
-
         if lang in {"ar", "cs", "de", "en", "es", "fr", "hu", "it", "nl", "pl", "pt", "ru", "tr", "zh", "ko"}:
             txt = multilingual_cleaners(txt, lang)
             if lang == "zh":
