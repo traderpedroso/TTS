@@ -556,9 +556,6 @@ def collapse_whitespace(text):
 
 
 def multilingual_cleaners(text, lang):
-    if lang == "pt":
-        text = normalizer(text)
-
     text = text.replace('"', "")
     if lang == "tr":
         text = text.replace("İ", "i")

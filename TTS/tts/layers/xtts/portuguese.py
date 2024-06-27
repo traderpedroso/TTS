@@ -103,7 +103,7 @@ def normalizer(text):
     text = remove_punctuation_at_begin(text)
     text = collapse_whitespace(text)
     text = re.sub(r"([^\.,!\?\-…])$", r"\1.", text)
-    text = re.sub(r"(?<!\.)\.(?!\.)", ";\n", text)
+    text = re.sub(r"(?<!\.)\.(?!\.)", ";", text)
     text = re.sub(r"\.\.+", "...", text)  # Corrige a substituição excessiva de pontos
     return text
 
