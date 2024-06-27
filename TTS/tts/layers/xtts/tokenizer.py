@@ -136,20 +136,7 @@ _abbreviations = {
             ("jr", "junior"),
         ]
     ],
-    "pt": [
-        (re.compile("\\b%s\\." % x[0], re.IGNORECASE), x[1])
-        for x in [
-            ("sra", "senhora"),
-            ("sr", "senhor"),
-            ("dr", "doutor"),
-            ("dra", "doutora"),
-            ("st", "santo"),
-            ("co", "companhia"),
-            ("jr", "júnior"),
-            ("ltd", "limitada"),
-            ("ltda", "limitada"),
-        ]
-    ],
+    "pt": [(re.compile("\\b%s\\." % x[0], re.IGNORECASE), x[1]) for x in []],
     "it": [
         (re.compile("\\b%s\\." % x[0], re.IGNORECASE), x[1])
         for x in [
@@ -297,12 +284,6 @@ _symbols_multilingual = {
     "pt": [
         (re.compile(r"%s" % re.escape(x[0]), re.IGNORECASE), x[1])
         for x in [
-            ("&", " e "),
-            ("@", " arroba "),
-            ("%", " por cento "),
-            ("#", " cardinal "),
-            ("$", " dólar "),
-            ("£", " libra "),
             ("°", " graus "),
         ]
     ],

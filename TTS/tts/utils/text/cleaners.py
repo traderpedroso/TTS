@@ -70,8 +70,6 @@ def replace_symbols(text, lang="en"):
         text = text.replace("&", " and ")
     elif lang == "fr":
         text = text.replace("&", " et ")
-    elif lang == "pt":
-        text = text.replace("&", " e ")
     elif lang == "ca":
         text = text.replace("&", " i ")
         text = text.replace("'", "")

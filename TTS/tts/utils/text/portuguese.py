@@ -12,18 +12,8 @@ def split_sentence(text, min_len=10):
 
 
 def merge_short_sentences(sens):
-    """Avoid short sentences by merging them with the following sentence.
-
-    Args:
-        List[str]: list of input sentences.
-
-    Returns:
-        List[str]: list of output sentences.
-    """
     sens_out = []
     for s in sens:
-        # If the previous sentense is too short, merge them with
-        # the current sentence.
         if len(sens_out) > 0 and len(sens_out[-1].split(" ")) <= 2:
             sens_out[-1] = sens_out[-1] + " " + s
         else:
@@ -38,7 +28,6 @@ def merge_short_sentences(sens):
 
 
 def txtsplit(text, desired_length=100, max_length=200):
-    """Split text it into chunks of a desired length trying to keep sentences intact."""
     text = re.sub(r"\n\n+", "\n", text)
     text = re.sub(r"\s+", " ", text)
     text = re.sub(r'[""]', '"', text)
@@ -102,7 +91,6 @@ def txtsplit(text, desired_length=100, max_length=200):
 
 
 def normalizer(text):
-
     text = _normalize_percentages(text)
     text = _normalize_time(text)
     text = _normalize_money(text)
@@ -115,29 +103,23 @@ def normalizer(text):
     text = remove_punctuation_at_begin(text)
     text = collapse_whitespace(text)
     text = re.sub(r"([^\.,!\?\-…])$", r"\1.", text)
-    text = re.sub(r"(?<!\.)\.(?!\.)", ";\n", text)
-    text = re.sub(r"\s+", " ", text)
-    # Remove espaços em branco no início e no final da string
-    text = text.strip()
+    text = re.sub(r"(?<!\.)\.(?!\.)", ";", text)
+    text = re.sub(r"\.\.+", "...", text)  # Corrige a substituição excessiva de pontos
     return text
 
 
 def save_to_txt(file_path, content):
     try:
-        # Ler o conteúdo existente do arquivo
         with open(file_path, "r", encoding="utf-8") as file:
             existing_content = file.readlines()
 
-        # Verificar se o conteúdo já está presente
         if f"{content}\n" in existing_content:
             pass
         else:
-            # Adicionar o novo conteúdo ao arquivo
             with open(file_path, "a", encoding="utf-8") as file:
                 file.write(f"{content}\n")
             print(f"Conteúdo '{content}' adicionado com sucesso.")
     except FileNotFoundError:
-        # Se o arquivo não existir, criar e adicionar o conteúdo
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(f"{content}\n")
         print(f"Arquivo criado e conteúdo '{content}' adicionado com sucesso.")
@@ -153,7 +135,6 @@ def process_train_list(file_path, text_cleaner):
         text_cleaner(text)
 
 
-# Regular expression matching whitespace:
 _whitespace_re = re.compile(r"\s+")
 
 rep_map = {
@@ -166,8 +147,8 @@ rep_map = {
     "\n": ".",
     "·": ",",
     "、": ",",
-    "...": ".",
-    "…": ".",
+    "...": "...",  # Corrige a substituição excessiva de ...
+    "…": "...",
     "$": ".",
     "“": "'",
     "”": "'",
@@ -191,7 +172,7 @@ rep_map = {
     "& ": " e ",
 }
 
-# Lista de pares (expressão regular, substituição) para abreviações em português do Brasil:
+
 abbreviations = [
     (re.compile(r"\b%s\b" % re.escape(x[0]), re.IGNORECASE), x[1])
     for x in [
@@ -315,15 +296,10 @@ def _normalize_money(text):
 
         return f"{amount_text} {currency_text}"
 
-    # Expressão regular para valores com milhões e bilhões
     text = re.sub(r"(R\$|€|£|\$) (\d+)( milhões| bilhões)", money_to_words_millions, text)
     text = re.sub(r"(R\$|€|£|\$)(\d+)( milhões| bilhões)", money_to_words_millions, text)
-
-    # Expressão regular para valores com centavos
     text = re.sub(r"(R\$|€|£|\$) (\d+),(\d{2})", money_to_words_cents, text)
     text = re.sub(r"(R\$|€|£|\$)(\d+),(\d{2})", money_to_words_cents, text)
-
-    # Expressão regular para valores inteiros
     text = re.sub(r"(R\$|€|£|\$) (\d+)", money_to_words_integers, text)
     text = re.sub(r"(R\$|€|£|\$)(\d+)", money_to_words_integers, text)
 
