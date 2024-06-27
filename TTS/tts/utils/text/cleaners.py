@@ -12,7 +12,6 @@ from .english.abbreviations import abbreviations_en
 from .english.number_norm import normalize_numbers as en_normalize_numbers
 from .english.time_norm import expand_time_english
 from .french.abbreviations import abbreviations_fr
-from .portuguese import normalizer
 
 # Regular expression matching whitespace:
 _whitespace_re = re.compile(r"\s+")
@@ -145,8 +144,9 @@ def french_cleaners(text):
 def portuguese_cleaners(text):
     """Basic pipeline for Portuguese text. There is no need to expand abbreviation and
     numbers, phonemizer already does that"""
-    text = normalizer(text)
     text = lowercase(text)
+    text = replace_symbols(text, lang="pt")
+    text = remove_aux_symbols(text)
     text = collapse_whitespace(text)
     return text
 
